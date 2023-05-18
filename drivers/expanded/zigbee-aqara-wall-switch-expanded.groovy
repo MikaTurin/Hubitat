@@ -76,30 +76,26 @@ metadata {
         /* Fingerprints and some device information comes from Guyeeba for QBKG12LM, QBKG11LM and LLZKMK11LM */
 
         /* Models WITH Neutral wire */
-		fingerprint profileId: "0104", inClusters: "0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.ctrl_ln1.aq1", deviceJoinName: "Aqara Wall switch"
-		fingerprint profileId: "0104", inClusters: "0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.ctrl_ln2.aq1", deviceJoinName: "Aqara Wall switch"
+	fingerprint profileId: "0104", inClusters: "0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.ctrl_ln1.aq1", deviceJoinName: "Aqara Wall switch"
+	fingerprint profileId: "0104", inClusters: "0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.ctrl_ln2.aq1", deviceJoinName: "Aqara Wall switch"
         fingerprint profileId: "0104", inClusters: "0000,0003,0004,0005,0001,0002,000A,0006,0010,0B04,000C", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.relay.c2acn01", deviceJoinName: "Aqara Double Relay"
 
+	/* H1 Models WITHOUT Neutral wire */
+	fingerprint profileId: "0104", inClusters: "0000,0002,0003,0004,0005,0006,0009", outClusters: "000A,0019", manufacturer: "LUMI", model: "lumi.switch.l1aeu1", deviceJoinName: "Aqara Wall switch H1 EU 1 Gang"
+        fingerprint profileId: "0104", inClusters: "0000,0002,0003,0004,0005,0006,0009", outClusters: "000A,0019", manufacturer: "LUMI", model: "lumi.switch.l2aeu1", deviceJoinName: "Aqara Wall switch H1 EU 2 Gang"
+		
         /* Models WITHOUT Neutral wire */
         fingerprint profileId: "0104", inClusters: "0000,0003,0001,0002,0019,000A", outClusters: "0000,000A,0019", manufacturer: "LUMI", model: "lumi.ctrl_neutral1", deviceJoinName: "Aqara Wall switch"
         fingerprint profileId: "0104", inClusters: "0000,0003,0001,0002,0019,000A", outClusters: "0000,000A,0019", manufacturer: "LUMI", model: "lumi.ctrl_neutral2", deviceJoinName: "Aqara Wall switch"
 
-        /* D1 Models WITH Neutral wire */
-        
+        /* D1 Models WITH Neutral wire */        
         fingerprint profileId: "0104", inClusters: "0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.switch.b1nacn02", application: "3D", deviceJoinName: "Aqara D1 Double Relay"
-
         fingerprint profileId: "0104", inClusters: "0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.switch.b2nacn02", application: "3D", deviceJoinName: "Aqara D1 Double Relay"
-
         fingerprint profileId: "0104", inClusters: "0000,0004,0003,0006,0010,0005,000A,0001,0002", outClusters: "0019,000A", manufacturer: "LUMI", model: "lumi.switch.b3nacn02", application: "3D", deviceJoinName: "Aqara D1 Double Relay"
-
         fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", model:"lumi.switch.b1lacn02", manufacturer:"LUMI"
-
         fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", model:"lumi.switch.b2lacn02", manufacturer:"LUMI"
-
         fingerprint profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006,0012,FCC0", model:"lumi.switch.l3acn3", manufacturer:"LUMI"
-
-        fingerprint model:"lumi.switch.b2laus01", manufacturer:"LUMI", profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", outClusters:"", application:"16"
-        
+        fingerprint model:"lumi.switch.b2laus01", manufacturer:"LUMI", profileId:"0104", endpointId:"02", inClusters:"0000,0003,0004,0005,0006", outClusters:"", application:"16"        
         }
 
     preferences {
@@ -153,6 +149,15 @@ Integer refresh(boolean connectButtons=false) {
     Integer physicalButtons = 0
     Integer buttonCombos = 0
     switch(model) {
+        case "lumi.switch.l1aeu1":
+            sendEvent(name:"numberOfButtons", value: 3, isStateChange: false, descriptionText: "Aqara Switch (QBKG04LM) detected: set to 2 buttons (physical 1)")
+            physicalButtons = 1
+            break
+        case "lumi.switch.l2aeu1":
+            sendEvent(name:"numberOfButtons", value: 5, isStateChange: false, descriptionText: "Aqara Switch (QBKG04LM) detected: set to 5 buttons (physical 2)")
+            physicalButtons = 2
+            buttonCombos = 1
+            break
         case "lumi.ctrl_ln1.aq1":
             sendEvent(name:"numberOfButtons", value: 2, isStateChange: false, descriptionText: "Aqara Switch (QBKG11LM) detected: set to 2 buttons (physical 1)")
             physicalButtons = 1
@@ -161,7 +166,7 @@ Integer refresh(boolean connectButtons=false) {
             sendEvent(name:"numberOfButtons", value: 5, isStateChange: false, descriptionText: "Aqara Switch (QBKG12LM) detected: set to 5 buttons (physical 2)")
             physicalButtons = 2
             buttonCombos = 1
-            break
+            break	    
         case "lumi.ctrl_neutral1":
             sendEvent(name:"numberOfButtons", value: 3, isStateChange: false, descriptionText: "Aqara Switch (QBKG04LM) detected: set to 2 buttons (physical 1)")
             physicalButtons = 1
@@ -298,6 +303,8 @@ void updated() {
 
 String setCleanModelNameWithAcceptedModels(String newModelToSet=null) {
     return setCleanModelName(newModelToSet=newModelToSet, acceptedModels=[
+        "lumi.switch.l1aeu1",
+        "lumi.switch.l2aeu1",	    
         "lumi.ctrl_neutral1",
         "lumi.ctrl_neutral2",
         "lumi.ctrl_ln1.aq1",
@@ -353,6 +360,8 @@ boolean isD1NeutralSwitch(String model=null) {
 boolean isD1NonNeutralSwitch(String model=null) {
     model = model != null ? model : getDeviceDataByName('model')
     switch(model) {
+        case "lumi.switch.l1aeu1":
+        case "lumi.switch.l2aeu1":	    
         case "lumi.switch.b1lacn02":
         case "lumi.switch.b2lacn02":
         case "lumi.switch.l3acn3":
@@ -370,6 +379,8 @@ boolean isD1Switch(String model=null) {
 boolean isKnownModel(String model=null) {
     model = model != null ? model : getDeviceDataByName('model')
     switch(model) {
+        case "lumi.switch.l1aeu1":
+        case "lumi.switch.l2aeu1":	    
         case "lumi.ctrl_neutral1":
         case "lumi.ctrl_neutral2":
         case "lumi.ctrl_ln1.aq1":
